@@ -26,6 +26,12 @@ https://github.com/hluk/CopyQ
 
 ## video related
 
+### repair video
+
+To resolve the "moov atom not found" error in FFmpeg (faced in opencv from a corupted video), run the following command line:
+
+    ffmpeg -i input_video_file.mp4 -vcodec copy -acodec copy -movflags faststart output_video_file.mp4
+
 ### convert video
 
 ### trim (in time) video
