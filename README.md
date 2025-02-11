@@ -37,7 +37,7 @@ To resolve the "moov atom not found" error in FFmpeg (faced in opencv from a cor
 ### trim (in time) video
 
 Fast, no re-encoding:
-Crop from 1mn to 2mn, time format is hh:mm:ss
+Crop from 1mn, duration 2mn, time format is hh:mm:ss
 
     ffmpeg -ss 00:01:00 -i input.mkv -to 00:02:00 -c copy output.mp4
 
