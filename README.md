@@ -9,9 +9,9 @@ Purpose: provide straight to the point solution to problems often (or rarely) en
 Primary buffer
 Secondary buffer
 
-xclip
+    xclip
 
-sudo apt install xclip
+    sudo apt install xclip
 
 Using xclip has no effect (shft-ctl-v does nothing) on RPi, use wp-clipboard
 
@@ -21,6 +21,33 @@ There is also copyQ but it's not pure CLI.
 
 https://github.com/hluk/CopyQ
 
+## files, directories, management
+
+### count files in directory
+
+    tree
+
+    ls | wc -l
+
+    ls -1 | wc -l
+
+-1: (that's a ONE) only one entry per line. Change it to -1a if you want hidden files too
+wc: "wordcount"
+-l: count lines.
+
+only some files, ex all files starting w tof :
+
+    ls tof* | wc -l
+
+### rename files
+
+ex: change space to _ (underscore) for all python files
+
+    rename -n 's/ /_/g' ./*.py
+
+to see the change without any action taken, use the -n switch.
+
+    rename -n 's/ /_/g' ./*.py
 
 # ffmpeg
 
@@ -94,5 +121,24 @@ https://stackoverflow.com/questions/69653703/how-to-get-frame-number-given-a-tim
 https://stackoverflow.com/questions/15364861/frame-number-overlay-with-ffmpeg
 
 # vim
+
+## buffers
+
+Open several files at once, type `:buffers` to see all the files in the vim buffers.
+
+example:
+
+    vi README.md
+
+
+Then from within vim, `:e another_file` and again `:e yet_another_file`
+
+The current visible file will be `yet_another_file`.
+
+See all the files in the buffer: `:buffers`
+
+Open a given buffer (here the buffer number 1 corresponding to README.md)  with:
+
+    :b1[enter]
 
 
