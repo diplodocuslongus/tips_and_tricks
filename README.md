@@ -23,6 +23,86 @@ https://github.com/hluk/CopyQ
 
 ## files, directories, management
 
+### replace string in files
+
+
+Non-recursive, non-hidden files in this directory only:
+
+perl -i -pe 's/foo/bar/g' ./* 
+sed -i 's/foo/bar/g' ./*
+
+Recursive, regular files (including hidden ones) in this and all subdirectories
+
+find . -type f -exec perl -i -pe 's/foo/bar/g' {} +
+find . -type f -exec sed -i 's/foo/bar/g' {} +
+
+Replace only if the file name matches another string / has a specific extension / is of a certain type etc:
+
+    Non-recursive, files in this directory only:
+
+    sed -i -- 's/foo/bar/g' *baz*    ## all files whose name contains baz
+    sed -i -- 's/foo/bar/g' *.baz    ## files ending in .baz
+
+    (using the -- option delimiter rather than ./ prefix works here as the filenames are guaranteed not to be - and makes the argument list shorter, less likely to break the system limit on the size of the arguments)
+
+    Recursive, regular files in this and all subdirectories
+
+    find . -name '*baz*' -type f -exec sed -i 's/foo/bar/g' {} +
+
+
+Replace only if the string is found in a certain context
+
+    Replace foo with bar only if it's followed by baz:
+
+    sed -i 's/foo\(.*baz\)/bar\1/' file
+
+Replace foo with bar only on the 4th line:
+
+sed -i '4s/foo/bar/g' file
+gawk -i /usr/share/awk/inplace.awk 'NR==4{gsub(/foo/,"baz")};1' file
+perl -i -pe 's/foo/bar/g if $.==4' file
+
+
+ Multiple replace operations: replace with different strings
+
+    You can combine sed commands:
+
+    sed -i 's/foo/bar/g; s/baz/zab/g; s/Alice/Joan/g' file
+
+    Be aware that order matters (sed 's/foo/bar/g; s/bar/baz/g' will substitute foo with baz).
+
+    or Perl commands
+
+    perl -i -pe 's/foo/bar/g; s/baz/zab/g; s/Alice/Joan/g' file
+
+    If you have a large number of patterns, it is easier to save your patterns and their replacements in a sed script file:
+
+    #!/usr/bin/sed -f
+    s/foo/bar/g
+    s/baz/zab/g
+
+Multiple replace operations: replace multiple patterns with the same string
+
+    Replace any of foo, bar or baz with foobar
+
+    sed -Ei 's/foo|bar|baz/foobar/g' file
+
+    or
+
+    perl -i -pe 's/foo|bar|baz/foobar/g' file
+
+Replace File paths in multiple files
+
+    Another use case of using different delimiter:
+
+    sed -i 's|path/to/foo|path/to/bar|g' ./*
+
+    or
+
+    perl -i -pe 's|path/to/foo|path/to/bar|g' ./*
+
+More: https://unix.stackexchange.com/a/112024/209363
+
 ### count files in directory
 
     tree
