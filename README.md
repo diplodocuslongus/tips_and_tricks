@@ -23,6 +23,14 @@ https://github.com/hluk/CopyQ
 
 ## files, directories, management
 
+### get number of processors
+
+nproc --all
+
+build with max number of processors
+
+make -j$(nproc)
+
 ### replace string in files
 
 
@@ -221,4 +229,10 @@ Open a given buffer (here the buffer number 1 corresponding to README.md)  with:
 
     :b1[enter]
 
+# libraries, packages
 
+## opencv
+
+### get version
+
+    pkg-config --modversion opencv4
