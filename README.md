@@ -25,24 +25,24 @@ https://github.com/hluk/CopyQ
 
 ### get number of processors
 
-nproc --all
+    nproc --all
 
 build with max number of processors
 
-make -j$(nproc)
+    make -j$(nproc)
 
 ### replace string in files
 
 
 Non-recursive, non-hidden files in this directory only:
 
-perl -i -pe 's/foo/bar/g' ./* 
-sed -i 's/foo/bar/g' ./*
+    perl -i -pe 's/foo/bar/g' ./* 
+    sed -i 's/foo/bar/g' ./*
 
 Recursive, regular files (including hidden ones) in this and all subdirectories
 
-find . -type f -exec perl -i -pe 's/foo/bar/g' {} +
-find . -type f -exec sed -i 's/foo/bar/g' {} +
+    find . -type f -exec perl -i -pe 's/foo/bar/g' {} +
+    find . -type f -exec sed -i 's/foo/bar/g' {} +
 
 Replace only if the file name matches another string / has a specific extension / is of a certain type etc:
 
@@ -66,9 +66,9 @@ Replace only if the string is found in a certain context
 
 Replace foo with bar only on the 4th line:
 
-sed -i '4s/foo/bar/g' file
-gawk -i /usr/share/awk/inplace.awk 'NR==4{gsub(/foo/,"baz")};1' file
-perl -i -pe 's/foo/bar/g if $.==4' file
+    sed -i '4s/foo/bar/g' file
+    gawk -i /usr/share/awk/inplace.awk 'NR==4{gsub(/foo/,"baz")};1' file
+    perl -i -pe 's/foo/bar/g if $.==4' file
 
 
  Multiple replace operations: replace with different strings
@@ -136,6 +136,16 @@ ex: change space to _ (underscore) for all python files
 to see the change without any action taken, use the -n switch.
 
     rename -n 's/ /_/g' ./*.py
+
+### limit / prune number of files shown with tree
+
+use filelimit:
+
+    $ tree /usr --filelimit 10
+    /usr
+    ├── bin [3260 entries exceeds filelimit, not opening dir]
+    ├── include [1110 entries exceeds filelimit, not opening dir]
+
 
 # ffmpeg
 
