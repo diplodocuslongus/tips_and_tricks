@@ -31,6 +31,21 @@ build with max number of processors
 
     make -j$(nproc)
 
+### history
+
+Clear history and don't show it has been cleaned:
+
+    history -c && history > /dev/null
+
+Delete content of ~/.bash_history
+
+Delete a given line in the history:
+
+Edit .bash_history or 
+history -d line_number
+
+
+
 ### replace string in files
 
 
