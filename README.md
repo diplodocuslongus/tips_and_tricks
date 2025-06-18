@@ -21,8 +21,6 @@ There is also copyQ but it's not pure CLI.
 
 https://github.com/hluk/CopyQ
 
-## files, directories, management
-
 ### get number of processors
 
     nproc --all
@@ -43,6 +41,25 @@ Delete a given line in the history:
 
 Edit .bash_history or 
 history -d line_number
+
+
+## files, directories, management
+
+### count files in directory
+
+    tree
+
+    ls | wc -l
+
+    ls -1 | wc -l
+
+-1: (that's a ONE) only one entry per line. Change it to -1a if you want hidden files too
+wc: "wordcount"
+-l: count lines.
+
+only some files, ex all files starting w tof :
+
+    ls tof* | wc -l
 
 
 
@@ -126,22 +143,6 @@ Replace File paths in multiple files
 
 More: https://unix.stackexchange.com/a/112024/209363
 
-### count files in directory
-
-    tree
-
-    ls | wc -l
-
-    ls -1 | wc -l
-
--1: (that's a ONE) only one entry per line. Change it to -1a if you want hidden files too
-wc: "wordcount"
--l: count lines.
-
-only some files, ex all files starting w tof :
-
-    ls tof* | wc -l
-
 ### rename files
 
 ex: change space to _ (underscore) for all python files
@@ -160,6 +161,34 @@ use filelimit:
     /usr
     ├── bin [3260 entries exceeds filelimit, not opening dir]
     ├── include [1110 entries exceeds filelimit, not opening dir]
+
+### search string in files
+
+Use ripgrep.
+
+Limit search to specific files (extension)
+
+Search for a string in c and python files ('c' includes .h, .c but not cpp)
+
+    rg search_string --type t c --type py
+
+This works also (no spaec):
+
+    rg search_string -tc -tpy
+
+Exclude file types:
+
+    rg search_string --type-not cpp
+
+or: 
+    
+    rg search_string -Tcpp
+
+All file types:
+
+    rg --type-list
+
+
 
 
 # ffmpeg
