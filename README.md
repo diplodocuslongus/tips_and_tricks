@@ -65,6 +65,28 @@ only some files, ex all files starting w tof :
 
 ### replace string in files
 
+#### specific string in all directories and sub
+
+First search to make sure of what will be replaced:
+
+Will search and show all instances of speed
+
+    find . -type d -name "third-party" -prune -o -type f \( -name "*.cpp" -o -name "*.h" \) -exec grep --color=always -Hn "speed" {} +
+
+Also:
+search for any word with speed in it
+grep -r -n --include=\*.{cpp,h} "speed" .
+
+for single word (TODO check it's correct)
+grep -r -n -w --include=\*.{cpp,h} "speed_" .
+
+Replace e.g.:
+
+speedalign with velocityalign
+
+    find . -type f \( -name "*.cpp" -o -name "*.h" \) -print0 | xargs -0 sed -i 's/speedalign/velocityalign/g'
+
+####
 
 Non-recursive, non-hidden files in this directory only:
 
@@ -195,6 +217,47 @@ All file types:
 
 ## video related
 
+### detect, remove black frames
+
+Application: start OBS recording before the actual application to record begins results in blcak frames at the beginning.
+
+Detect them with:
+
+ffmpeg -i WP_nav_4pts.mp4 -vf blackframe=amount=98:threshold=32 -an -f null -
+
+Will show the amount of black for each frame:
+
+[Parsed_blackframe_0 @ 0x5c669f63c080] frame:1 pblack:100 pts:1 t:0.033333 type:B last_keyframe:0
+[Parsed_blackframe_0 @ 0x5c669f63c080] frame:2 pblack:100 pts:2 t:0.066667 type:B last_keyframe:0
+[Parsed_blackframe_0 @ 0x5c669f63c080] frame:3 pblack:100 pts:3 t:0.100000 type:B last_keyframe:0
+[...]
+[Parsed_blackframe_0 @ 0x5c669f63c080] frame:69 pblack:99 pts:69 t:2.300000 type:B last_keyframe:0
+[Parsed_blackframe_0 @ 0x5c669f63c080] frame:70 pblack:99 pts:70 t:2.333333 type:B last_keyframe:0
+[Parsed_blackframe_0 @ 0x5c669f63c080] frame:71 pblack:99 pts:71 t:2.366667 type:B last_keyframe:0
+
+Non black frame starts at frame #69 and time 2.3.
+
+This can be used with ffplay as well, to play the video while also outputint the above info in the console:
+
+    ffplay -i input.mp4 -vf blackframe=amount=98:threshold=32
+
+Use these (frame # or time) to either remove the black frame from the input or convert directly to another file.
+
+Trim the begining (containing blackframe but it can be something else to trim):
+
+    ffmpeg -i WP_nav_4pts.mp4 -ss 1.8 -c:v libx264 -c:a aac output.mp4
+
+Or save as ogv:
+(with audio)
+
+    ffmpeg -ss 2.1 -i WP_nav_4pts.mp4 -c:v libtheora -c:a libvorbis WP_nav_4pts.ogv
+
+
+(without audio)
+
+    ffmpeg -ss 2.1 -i WP_nav_4pts.mp4 -c:v libtheora -an WP_nav_4pts.ogv
+
+
 ### repair video
 
 To resolve the "moov atom not found" error in FFmpeg (faced in opencv from a corupted video), run the following command line:
@@ -203,7 +266,19 @@ To resolve the "moov atom not found" error in FFmpeg (faced in opencv from a cor
 
 ### convert video
 
+Convert to ogv:
+
+(with audio)
+
+    ffmpeg -ss 2.1 -i input.mp4 -c:v libtheora -c:a libvorbis output.ogv
+
+(without audio)
+
+    ffmpeg -ss 2.1 -i input.mp4 -c:v libtheora -an output.ogv
+
 ### trim (in time) video
+
+
 
 Fast, no re-encoding:
 Crop from 1mn, duration 2mn, time format is hh:mm:ss
