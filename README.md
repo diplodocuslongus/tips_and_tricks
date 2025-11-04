@@ -2,6 +2,44 @@ Purpose: provide straight to the point solution to problems often (or rarely) en
 
 # Productivity (linux related)
 
+## clean up space in /usr
+
+### clean up /usr/share/doc
+
+https://askubuntu.com/questions/129566/remove-documentation-to-save-hard-drive-space
+Create a file /etc/dpkg/dpkg.cfg.d/01_nodoc which specifies the desired filters. Example:
+
+cd /etc/dpkg/dpkg.cfg.d
+
+sudo vi 01_nodoc
+
+This is mine, on the gonze:
+ (I kept the man)
+
+    # purpose: exclude documentation installation 
+    path-exclude /usr/share/doc/*
+    # we need to keep copyright files for legal reasons
+    path-include /usr/share/doc/*/copyright
+    # I keep the man page can be usefull for CLI
+    # path-exclude /usr/share/man/*
+    path-exclude /usr/share/groff/*
+    path-exclude /usr/share/info/*
+    # lintian stuff is small, but really unnecessary
+    path-exclude /usr/share/lintian/*
+    path-exclude /usr/share/linda/*
+
+
+Then:
+
+find /usr/share/doc -depth -type f ! -name copyright|sudo xargs rm || true
+du -h doc
+find /usr/share/doc -empty|sudo xargs rmdir || true
+sudo rm -rf /usr/share/groff/* /usr/share/info/*
+sudo rm -rf /usr/share/lintian/* /usr/share/linda/*
+
+
+Doc was reduced from ~600MB down to ~200MB (not sure why I couldn't shrink it further  though)
+
 ## CLI Command Line 
 
 ## copy - paste
