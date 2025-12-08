@@ -80,6 +80,50 @@ Delete a given line in the history:
 Edit .bash_history or 
 history -d line_number
 
+## pdf
+
+### update or remove watermarks in pdf
+
+Uncompress the pdf
+
+    pdftk input.pdf output uncompressed.pdf uncompress
+
+Use sed to search and replace or delete watermarks strings. 
+
+    sed -e "s/Old text/New text/g" uncompressed.pdf > unwatermarked.pdf
+    sed -e "s/Text to remove//g" uncompressed.pdf > unwatermarked.pdf
+
+Recompress the pdf:
+
+    pdftk unwatermarked.pdf output final.pdf compress
+
+Here the copyright date is updated. 
+    sed -e "s/Copyright © 2020/Copyright © 2025/g" uncompressed.pdf > unwatermarked.pdf
+
+Or (*): 
+
+    sed -e "s/Copyright \xa9 2020/Copyright \xa9 2025/g" uncompressed.pdf > unwatermarked.pdf
+
+ (*) Note about the copyright symbol: it's unicode code is 00A9. 
+Depending on how the pdf was encoded, use either directly the symbol (copy past or enter the unicode ctl-shft-u a9 [enter] or [space]), or the octal code (\o251), or the hex, in the later case, either \xc2\xa9 or \xa9 or both will work.
+
+To check which copyright signature will work with the document and current system (terminal) encoding, test it in the command line, but note that the document's encoding may be different (so test in the document directly):
+
+These work in the CLI:
+    $ echo blah © blah  | sed "s/ \xc2\xa9 / /g"
+    blah blah
+    $ echo blah © blah  | sed "s/ © / /g"
+    blah blah
+
+These don't:
+    $ echo blah © blah | sed "s/.*©.*//g"
+
+    $ echo blah © blah | sed 's/\o251/X/'
+    blah �X blah
+    $ echo blah © blah  | sed "s/ \xa9 / /g"
+    blah © blah
+
+
 
 ## files, directories, management
 
@@ -102,6 +146,8 @@ only some files, ex all files starting w tof :
 
 
 ### replace string in files
+
+
 
 #### specific string in all directories and sub
 
