@@ -98,6 +98,7 @@ Recompress the pdf:
     pdftk unwatermarked.pdf output final.pdf compress
 
 Here the copyright date is updated. 
+
     sed -e "s/Copyright © 2020/Copyright © 2025/g" uncompressed.pdf > unwatermarked.pdf
 
 Or (*): 
