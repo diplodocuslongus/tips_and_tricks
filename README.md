@@ -296,6 +296,15 @@ All file types:
     rg --type-list
 
 
+# imagemagick, magick, identify
+
+
+## resize
+
+This will make the output small (quality and strip), 4x smaller than without.
+
+    magick IMG_20251215_123306.jpg -resize 640 -quality 85 -strip romi_rover_assembled_mouse.jpg
+
 
 
 # ffmpeg
