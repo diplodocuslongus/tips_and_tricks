@@ -44,10 +44,25 @@ Doc was reduced from ~600MB down to ~200MB (not sure why I couldn't shrink it fu
 
 ## copy - paste
 
-Primary buffer
+Primary buffer (clipboard)
+
+    ls | xclip -sel c
+
+    echo "a string" | xcclip -sel c
+
+pass the filename directly to xclip.
+
+    xclip -selection clipboard filename.txt
+
+paste from clipboard: Use the -o (out) flag to print the current clipboard contents to your terminal.
+
+    xclip -o -selection clipboard
+
 Secondary buffer
 
     xclip
+
+Insrtall:
 
     sudo apt install xclip
 
@@ -58,6 +73,19 @@ https://github.com/bugaevc/wl-clipboard
 There is also copyQ but it's not pure CLI.
 
 https://github.com/hluk/CopyQ
+
+
+### find something
+
+Use fdfind 
+
+Exclude something from the search
+
+    fdfind -E "dir1" -E "dir2" search_pattern
+
+(or fd if no name conflict)
+
+
 
 ### get number of processors
 
