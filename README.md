@@ -1,3 +1,47 @@
+<!-- vim-markdown-toc GFM -->
+
+* [Productivity (linux related)](#productivity-linux-related)
+    * [clean up space in /usr](#clean-up-space-in-usr)
+        * [clean up /usr/share/doc](#clean-up-usrsharedoc)
+    * [CLI Command Line](#cli-command-line)
+    * [ssh, scp](#ssh-scp)
+    * [copy - paste on wayland](#copy---paste-on-wayland)
+    * [copy - paste on X11](#copy---paste-on-x11)
+        * [find something](#find-something)
+        * [get number of processors](#get-number-of-processors)
+        * [history](#history)
+    * [pdf](#pdf)
+        * [update or remove watermarks in pdf](#update-or-remove-watermarks-in-pdf)
+    * [files, directories, management](#files-directories-management)
+        * [count files in directory](#count-files-in-directory)
+        * [replace string in files](#replace-string-in-files)
+            * [specific string in all directories and sub](#specific-string-in-all-directories-and-sub)
+        * [rename files](#rename-files)
+        * [limit / prune number of files shown with tree](#limit--prune-number-of-files-shown-with-tree)
+        * [search string in files](#search-string-in-files)
+* [imagemagick, magick, identify](#imagemagick-magick-identify)
+    * [resize](#resize)
+* [ffmpeg](#ffmpeg)
+    * [video related](#video-related)
+        * [detect, remove black frames](#detect-remove-black-frames)
+        * [repair video](#repair-video)
+        * [convert video](#convert-video)
+        * [trim (in time) video](#trim-in-time-video)
+        * [extract image](#extract-image)
+        * [crop video](#crop-video)
+    * [audio](#audio)
+        * [extract audio](#extract-audio)
+    * [Others](#others)
+        * [Get frame number from timestamp](#get-frame-number-from-timestamp)
+        * [overlay frame number](#overlay-frame-number)
+* [vim](#vim)
+    * [buffers](#buffers)
+* [libraries, packages](#libraries-packages)
+    * [opencv](#opencv)
+        * [get version](#get-version)
+
+<!-- vim-markdown-toc -->
+
 Purpose: provide straight to the point solution to problems often (or rarely) encountered while coding, searching and working.
 
 # Productivity (linux related)
@@ -42,7 +86,74 @@ Doc was reduced from ~600MB down to ~200MB (not sure why I couldn't shrink it fu
 
 ## CLI Command Line 
 
-## copy - paste
+## ssh, scp
+
+ssh using private key (like on a virtual machine):
+
+    ssh -i ~/.ssh/itri_bdl_brainctlabel.pem azureuser@135.222.208.146
+
+Copy when using private key:
+
+single file
+
+    scp -i /path/to/private_key.pem username@remote_vm_ip:/path/to/remote/file.txt /path/to/local/destination/
+
+example:
+
+    scp -i ~/.ssh/itri_bdl_brainctlabel.pem dotfiles/tmux/tmux.conf.local     azureuser@135.222.208.146:/home/azureuser/.config/tmux/tmux.conf.local
+
+Entire directory
+
+    scp -r -i ~/.ssh/my_key.pem ubuntu@192.168.1.50:/home/ubuntu/logs/ ~/Downloads/
+
+Using specific port:
+
+    scp -P 2222 -i ~/.ssh/my_key.pem ubuntu@192.168.1.50:/home/ubuntu/file.txt .
+
+
+## copy - paste on wayland
+
+    sudo apt install wl-clipboard
+
+Copy text:
+
+    wl-copy "Hello World"
+    ls ~/Downloads | wl-copy
+    wl-copy < document.txt
+
+Paste
+
+Output clipboard content to terminal:
+
+    wl-paste
+
+    wl-paste > backup.txt
+
+
+Wayland supports both the regular system clipboard (Ctrl+C / Ctrl+V) and the "Primary Selection" buffer (text highlighted with the mouse, pasted via middle-click). 
+
+Use the -p or --primary flag to target the selection buffer:
+
+Copy to primary buffer: 
+
+echo "text" | wl-copy --primary
+
+Paste from primary buffer: wl-paste --primary
+
+Non-Text Media (Images & Files)wl-clipboard automatically handles different MIME types. 
+You can copy binary data like screenshots directly from the CLI:
+
+Copy an image: 
+
+wl-copy < photo.png
+
+Paste an image to a file: 
+
+wl-paste > downloaded_image.png
+
+## copy - paste on X11
+
+This is for older x11, i.e. up to ubuntu / pop-os 22.
 
 Primary buffer (clipboard)
 
