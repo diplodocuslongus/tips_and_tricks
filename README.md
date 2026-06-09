@@ -121,6 +121,14 @@ Copy text:
     ls ~/Downloads | wl-copy
     wl-copy < document.txt
 
+copy an image
+
+    wl-copy < photo.png
+
+Copy to primary clipboard (the middle mouse for paste)
+
+    echo "text" | wl-copy --primary
+
 Paste
 
 Output clipboard content to terminal:
@@ -136,7 +144,6 @@ Use the -p or --primary flag to target the selection buffer:
 
 Copy to primary buffer: 
 
-echo "text" | wl-copy --primary
 
 Paste from primary buffer: wl-paste --primary
 
