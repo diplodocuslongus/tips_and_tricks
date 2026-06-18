@@ -1,11 +1,9 @@
 <!-- vim-markdown-toc GFM -->
 
 * [Productivity (linux related)](#productivity-linux-related)
-    * [clean up space in /usr](#clean-up-space-in-usr)
-        * [clean up /usr/share/doc](#clean-up-usrsharedoc)
     * [CLI Command Line](#cli-command-line)
     * [ssh, scp](#ssh-scp)
-    * [copy - paste on wayland](#copy---paste-on-wayland)
+    * [copy - paste: on wayland](#copy---paste-on-wayland)
     * [copy - paste on X11](#copy---paste-on-x11)
         * [find something](#find-something)
         * [get number of processors](#get-number-of-processors)
@@ -13,6 +11,8 @@
     * [pdf](#pdf)
         * [update or remove watermarks in pdf](#update-or-remove-watermarks-in-pdf)
     * [files, directories, management](#files-directories-management)
+        * [list stuff](#list-stuff)
+        * [ownership, group, user...](#ownership-group-user)
         * [count files in directory](#count-files-in-directory)
         * [replace string in files](#replace-string-in-files)
             * [specific string in all directories and sub](#specific-string-in-all-directories-and-sub)
@@ -39,6 +39,9 @@
 * [libraries, packages](#libraries-packages)
     * [opencv](#opencv)
         * [get version](#get-version)
+* [Others, less used](#others-less-used)
+    * [clean up space in /usr](#clean-up-space-in-usr)
+        * [clean up /usr/share/doc](#clean-up-usrsharedoc)
 
 <!-- vim-markdown-toc -->
 
@@ -46,45 +49,10 @@ Purpose: provide straight to the point solution to problems often (or rarely) en
 
 # Productivity (linux related)
 
-## clean up space in /usr
-
-### clean up /usr/share/doc
-
-https://askubuntu.com/questions/129566/remove-documentation-to-save-hard-drive-space
-Create a file /etc/dpkg/dpkg.cfg.d/01_nodoc which specifies the desired filters. Example:
-
-cd /etc/dpkg/dpkg.cfg.d
-
-sudo vi 01_nodoc
-
-This is mine, on the gonze:
- (I kept the man)
-
-    # purpose: exclude documentation installation 
-    path-exclude /usr/share/doc/*
-    # we need to keep copyright files for legal reasons
-    path-include /usr/share/doc/*/copyright
-    # I keep the man page can be usefull for CLI
-    # path-exclude /usr/share/man/*
-    path-exclude /usr/share/groff/*
-    path-exclude /usr/share/info/*
-    # lintian stuff is small, but really unnecessary
-    path-exclude /usr/share/lintian/*
-    path-exclude /usr/share/linda/*
-
-
-Then:
-
-find /usr/share/doc -depth -type f ! -name copyright|sudo xargs rm || true
-du -h doc
-find /usr/share/doc -empty|sudo xargs rmdir || true
-sudo rm -rf /usr/share/groff/* /usr/share/info/*
-sudo rm -rf /usr/share/lintian/* /usr/share/linda/*
-
-
-Doc was reduced from ~600MB down to ~200MB (not sure why I couldn't shrink it further  though)
 
 ## CLI Command Line 
+
+
 
 ## ssh, scp
 
@@ -100,7 +68,7 @@ single file
 
 example:
 
-    scp -i ~/.ssh/itri_bdl_brainctlabel.pem dotfiles/tmux/tmux.conf.local     azureuser@135.222.208.146:/home/azureuser/.config/tmux/tmux.conf.local
+    scp -i ~/.ssh/itri_bdl_brainctlabel.pem dotfiles/tmux/tmux.conf.local azureuser@135.222.208.146:/home/azureuser/.config/tmux/tmux.conf.local
 
 Entire directory
 
@@ -111,9 +79,11 @@ Using specific port:
     scp -P 2222 -i ~/.ssh/my_key.pem ubuntu@192.168.1.50:/home/ubuntu/file.txt .
 
 
-## copy - paste on wayland
+## copy - paste: on wayland
 
     sudo apt install wl-clipboard
+
+Use the cpcb alias in bash_aliases_wayland to get all the same functions from wl-copy.
 
 Copy text:
 
@@ -134,9 +104,7 @@ Paste
 Output clipboard content to terminal:
 
     wl-paste
-
     wl-paste > backup.txt
-
 
 Wayland supports both the regular system clipboard (Ctrl+C / Ctrl+V) and the "Primary Selection" buffer (text highlighted with the mouse, pasted via middle-click). 
 
@@ -150,13 +118,9 @@ Paste from primary buffer: wl-paste --primary
 Non-Text Media (Images & Files)wl-clipboard automatically handles different MIME types. 
 You can copy binary data like screenshots directly from the CLI:
 
-Copy an image: 
-
-wl-copy < photo.png
-
 Paste an image to a file: 
 
-wl-paste > downloaded_image.png
+    wl-paste > downloaded_image.png
 
 ## copy - paste on X11
 
@@ -273,6 +237,16 @@ These don't:
 
 
 ## files, directories, management
+
+### list stuff
+
+
+### ownership, group, user...
+
+Check current directory rw:
+
+    $ ls -ld .
+    dr-xr-xr-x 4 weike weike 4096 Jun  8 13:55 .
 
 ### count files in directory
 
@@ -441,6 +415,12 @@ All file types:
 
     rg --type-list
 
+Exclude folders
+
+    rg string -g !'dir_to_exclude'
+Example:
+
+    rg latency -g !'third-party'
 
 # imagemagick, magick, identify
 
@@ -463,17 +443,14 @@ Application: start OBS recording before the actual application to record begins 
 
 Detect them with:
 
-ffmpeg -i WP_nav_4pts.mp4 -vf blackframe=amount=98:threshold=32 -an -f null -
+    ffmpeg -i WP_nav_4pts.mp4 -vf blackframe=amount=98:threshold=32 -an -f null -
 
 Will show the amount of black for each frame:
 
-[Parsed_blackframe_0 @ 0x5c669f63c080] frame:1 pblack:100 pts:1 t:0.033333 type:B last_keyframe:0
-[Parsed_blackframe_0 @ 0x5c669f63c080] frame:2 pblack:100 pts:2 t:0.066667 type:B last_keyframe:0
-[Parsed_blackframe_0 @ 0x5c669f63c080] frame:3 pblack:100 pts:3 t:0.100000 type:B last_keyframe:0
-[...]
-[Parsed_blackframe_0 @ 0x5c669f63c080] frame:69 pblack:99 pts:69 t:2.300000 type:B last_keyframe:0
-[Parsed_blackframe_0 @ 0x5c669f63c080] frame:70 pblack:99 pts:70 t:2.333333 type:B last_keyframe:0
-[Parsed_blackframe_0 @ 0x5c669f63c080] frame:71 pblack:99 pts:71 t:2.366667 type:B last_keyframe:0
+    [Parsed_blackframe_0 @ 0x5c669f63c080] frame:1 pblack:100 pts:1 t:0.033333 type:B last_keyframe:0
+    [Parsed_blackframe_0 @ 0x5c669f63c080] frame:2 pblack:100 pts:2 t:0.066667 type:B last_keyframe:0
+    [...]
+    [Parsed_blackframe_0 @ 0x5c669f63c080] frame:71 pblack:99 pts:71 t:2.366667 type:B last_keyframe:0
 
 Non black frame starts at frame #69 and time 2.3.
 
@@ -517,8 +494,6 @@ Convert to ogv:
     ffmpeg -ss 2.1 -i input.mp4 -c:v libtheora -an output.ogv
 
 ### trim (in time) video
-
-
 
 Fast, no re-encoding:
 Crop from 1mn, duration 2mn, time format is hh:mm:ss
@@ -605,3 +580,42 @@ Open a given buffer (here the buffer number 1 corresponding to README.md)  with:
 ### get version
 
     pkg-config --modversion opencv4
+
+# Others, less used
+
+## clean up space in /usr
+
+### clean up /usr/share/doc
+
+https://askubuntu.com/questions/129566/remove-documentation-to-save-hard-drive-space
+Create a file /etc/dpkg/dpkg.cfg.d/01_nodoc which specifies the desired filters. Example:
+
+    cd /etc/dpkg/dpkg.cfg.d
+
+    sudo vi 01_nodoc
+
+This is mine, on the gonze:
+ (I kept the man)
+
+    # purpose: exclude documentation installation 
+    path-exclude /usr/share/doc/*
+    # we need to keep copyright files for legal reasons
+    path-include /usr/share/doc/*/copyright
+    # I keep the man page can be usefull for CLI
+    # path-exclude /usr/share/man/*
+    path-exclude /usr/share/groff/*
+    path-exclude /usr/share/info/*
+    # lintian stuff is small, but really unnecessary
+    path-exclude /usr/share/lintian/*
+    path-exclude /usr/share/linda/*
+
+Then:
+
+    find /usr/share/doc -depth -type f ! -name copyright|sudo xargs rm || true
+    du -h doc
+    find /usr/share/doc -empty|sudo xargs rmdir || true
+    sudo rm -rf /usr/share/groff/* /usr/share/info/*
+    sudo rm -rf /usr/share/lintian/* /usr/share/linda/*
+
+
+Doc was reduced from ~600MB down to ~200MB (not sure why I couldn't shrink it further  though)
