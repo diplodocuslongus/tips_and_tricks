@@ -1,5 +1,8 @@
 <!-- vim-markdown-toc GFM -->
 
+* [Coding](#coding)
+    * [github](#github)
+        * [Setup ssh key](#setup-ssh-key)
 * [Productivity (linux related)](#productivity-linux-related)
     * [CLI Command Line](#cli-command-line)
     * [ssh, scp](#ssh-scp)
@@ -47,12 +50,41 @@
 
 Purpose: provide straight to the point solution to problems often (or rarely) encountered while coding, searching and working.
 
+# Coding
+
+## github
+
+### Setup ssh key
+
+For ex for RPi
+
+    ssh-keygen -t ed25519 -C "hixxx.xxx@gmail.com" -f ~/.ssh/github_diplo_rpi
+
+Copy to clipboard
+
+    # on x11
+    xclip -sel clip < ~/.ssh/github_diplo_rpi.pub
+    # on wayland
+    wl-copy < ~/.ssh/github_diplo_rpi.pub
+    # or the alias cpcb
+    cpcb < ~/.ssh/github_diplo_rpi.pub
+
+Go to gihub , profile, settings, SSH keys, add SSH key, give it a name and paste the clipboard. 
+Copy the key to the RPi(s):
+
+    scp /home/fw16/.ssh/github_diplo_rpi rpi3_boid0:~/.ssh
+
+This assumes rpi3_boid0 is added in the ~/.ssh/config file of the host.
+Otherwise do this:
+
+    scp /home/fw16/.ssh/github_diplo_rpi user_name@ip_address:~/.ssh
+
+
+
+
 # Productivity (linux related)
 
-
 ## CLI Command Line 
-
-
 
 ## ssh, scp
 
@@ -83,9 +115,15 @@ Using specific port:
 
     sudo apt install wl-clipboard
 
-Use the cpcb alias in bash_aliases_wayland to get all the same functions from wl-copy.
+Use the `cpcb` alias in bash_aliases_wayland to get all the same functions from wl-copy.
 
 Copy text:
+
+    cpcb "Hello World"
+    ls ~/Downloads | cpcb
+    cpcb < document.txt
+
+Or: 
 
     wl-copy "Hello World"
     ls ~/Downloads | wl-copy
