@@ -22,6 +22,8 @@
         * [rename files](#rename-files)
         * [limit / prune number of files shown with tree](#limit--prune-number-of-files-shown-with-tree)
         * [search string in files](#search-string-in-files)
+* [tmux](#tmux)
+* [wezterm](#wezterm)
 * [imagemagick, magick, identify](#imagemagick-magick-identify)
     * [resize](#resize)
 * [ffmpeg](#ffmpeg)
@@ -459,6 +461,24 @@ Exclude folders
 Example:
 
     rg latency -g !'third-party'
+
+# tmux
+
+shortcuts and bindings
+tmx aliased to tmux
+
+    alt - -: vertical split (adds horizontal line)
+    alt - \: horizontal split (adds vertical line)
+    alt - q: quit current pane or tmux all together if no pane is available
+    ctl - a + [: enter vim mode to copy text (move up down with same keybindings as in vim, ex G, gg, hjkl, arrows, 0, $...) , yank to clipboard with y
+    y: when in copy mode, yank text to clipboard 
+
+Better than tmux, use wezterm.
+
+# wezterm
+
+A terminal alternative to the gnome or cosmic terminals, includes a built in multiplexer similar to tmux.
+
 
 # imagemagick, magick, identify
 
