@@ -3,6 +3,11 @@
 * [Coding](#coding)
     * [github](#github)
         * [Setup ssh key](#setup-ssh-key)
+* [Connecting and working on a server remotely](#connecting-and-working-on-a-server-remotely)
+    * [Common setups](#common-setups)
+    * [- setup wezterm init file with key bindings, etc.](#--setup-wezterm-init-file-with-key-bindings-etc)
+    * [-](#-)
+    * [utils](#utils)
 * [Productivity (linux related)](#productivity-linux-related)
     * [CLI Command Line](#cli-command-line)
     * [ssh, scp](#ssh-scp)
@@ -24,6 +29,10 @@
         * [search string in files](#search-string-in-files)
 * [tmux](#tmux)
 * [wezterm](#wezterm)
+    * [WezTerm Custom Keybindings Cheat Sheet](#wezterm-custom-keybindings-cheat-sheet)
+        * [Layout & Split Operations](#layout--split-operations)
+        * [Workspace Navigation](#workspace-navigation)
+        * [Keyboard Selection & Clipboard (No-Mouse Copy)](#keyboard-selection--clipboard-no-mouse-copy)
 * [imagemagick, magick, identify](#imagemagick-magick-identify)
     * [resize](#resize)
 * [ffmpeg](#ffmpeg)
@@ -83,6 +92,33 @@ Otherwise do this:
     scp /home/fw16/.ssh/github_diplo_rpi user_name@ip_address:~/.ssh
 
 
+# Connecting and working on a server remotely
+
+I describe some use cases, may need to consolidate all in some basic instructions
+
+## Common setups
+
+- Install wezterm
+(build with cargo from latest version, or use appimage or install raw file)
+- setup wezterm init file with key bindings, etc.
+-
+-
+## utils
+
+View images from a remote server.
+Context: logged in to a server, with e.g. (did that from a wezterm terminal, opened from the system launcher)
+    
+    ssh -t weike_l40_server
+
+Super good trick:use this python script:
+
+$ python3 -c 'import sys, base64
+with open(sys.argv[1], "rb") as f:
+    data = base64.b64encode(f.read()).decode("ascii")
+sys.stdout.write(f"\033]1337;File=inline=1:{data}\a\n")
+' path/to/image/to/show
+
+runs/detect/predict/TAPP-17060_1HD-H264_MOV_1080p25_12MBs.mp4_time_ms.02362500.0.jpg
 
 
 # Productivity (linux related)
@@ -480,6 +516,30 @@ Better than tmux, use wezterm.
 
 A terminal alternative to the gnome or cosmic terminals, includes a built in multiplexer similar to tmux.
 
+## WezTerm Custom Keybindings Cheat Sheet
+
+All layouts, panes, and selection mechanics are custom-tailored to work seamlessly both locally and over **SSH connections** to remote servers.
+
+### Layout & Split Operations
+* **`Alt + -`** — **Split Vertically**: Spawns a new pane beneath the active one (creates a horizontal divider line). Over SSH, it clones your existing network tunnel and jumps straight into the remote folder you were navigating.
+* **`Alt + \`** — **Split Horizontally**: Spawns a new pane to the right of the active one (creates a vertical divider line). Reuses active SSH network streams and synchronizes directories.
+* **`Alt + g`** — **Grid Macro Layout**: Instantly partitions your terminal workspace into a uniform 4-pane layout (`+` grid shape).
+* **`Alt + q`** — **Close Pane**: Instantly closes the active terminal split window layout with an interactive confirmation prompt.
+
+### Workspace Navigation
+* **`Alt + Left Arrow`** — Focus pane to the **Left**.
+* **`Alt + Right Arrow`** — Focus pane to the **Right**.
+* **`Alt + Up Arrow`** — Focus pane to the **Upper** layout cell.
+* **`Alt + Down Arrow`** — Focus pane to the **Lower** layout cell.
+
+### Keyboard Selection & Clipboard (No-Mouse Copy)
+* **`Alt + v`** — **Enter Vim Copy Mode**: Activates WezTerm's client-side copy environment.
+  * **`h / j / k / l`** — Navigate the terminal buffer.
+  * **`Ctrl + f` / `Ctrl + b`** — Page Down / Page Up scroll velocity controls.
+  * **`v`** — Initiate standard visual text block selection.
+  * **`Shift + v`** — Initiate full visual-line selection mode.
+  * **`y`** — **Yank Selection**: Copies highlighted strings directly to your host machine's clipboard buffer and exits Copy Mode.
+  * **`Escape`** — Dismiss text buffer copy overlays without modifying host clipboards.
 
 # imagemagick, magick, identify
 
