@@ -10,7 +10,7 @@
     * [utils](#utils)
 * [Productivity (linux related)](#productivity-linux-related)
     * [CLI Command Line](#cli-command-line)
-    * [ssh, scp](#ssh-scp)
+    * [ssh, scp, rsync](#ssh-scp-rsync)
     * [copy - paste: on wayland](#copy---paste-on-wayland)
     * [copy - paste on X11](#copy---paste-on-x11)
         * [find something](#find-something)
@@ -112,20 +112,20 @@ Context: logged in to a server, with e.g. (did that from a wezterm terminal, ope
 
 Super good trick:use this python script:
 
-$ python3 -c 'import sys, base64
-with open(sys.argv[1], "rb") as f:
-    data = base64.b64encode(f.read()).decode("ascii")
-sys.stdout.write(f"\033]1337;File=inline=1:{data}\a\n")
-' path/to/image/to/show
+    $ python3 -c 'import sys, base64
+    with open(sys.argv[1], "rb") as f:
+        data = base64.b64encode(f.read()).decode("ascii")
+    sys.stdout.write(f"\033]1337;File=inline=1:{data}\a\n")
+    ' path/to/image/to/show
 
-runs/detect/predict/TAPP-17060_1HD-H264_MOV_1080p25_12MBs.mp4_time_ms.02362500.0.jpg
+    runs/detect/predict/TAPP-17060_1HD-H264_MOV_1080p25_12MBs.mp4_time_ms.02362500.0.jpg
 
 
 # Productivity (linux related)
 
 ## CLI Command Line 
 
-## ssh, scp
+## ssh, scp, rsync
 
 ssh using private key (like on a virtual machine):
 
@@ -148,6 +148,24 @@ Entire directory
 Using specific port:
 
     scp -P 2222 -i ~/.ssh/my_key.pem ubuntu@192.168.1.50:/home/ubuntu/file.txt .
+
+rsync from laptop
+
+to tranfer local to remote and vice versa
+
+whole folder, local to server:
+
+rsync -avzP -e ssh /path/to/local/video_folder/ weike_l40_server:/home2/weike/dataset/Show_Chuan_CVMPO/new_test_videos/
+
+example, single file:
+$ rsync -avzP -e ssh A001_VID004.mp4  weike_l40_server:/home2/weike/dataset/Show_Chuan_CVMPO/video_for_inference/
+
+whole folder:
+
+rsync -avzP -e ssh weike_l40_server:/home/weike/show_chuan_CVMPO/inference_image_outputs/ ~/Desktop/hernia_report_images/
+
+single image, example:
+$ rsync -avzP -e ssh weike_l40_server:/home/weike/show_chuan_CVMPO/cvmpo/cvmpo_tracked_overlay.mp4 ~/Downloads/
 
 
 ## copy - paste: on wayland
