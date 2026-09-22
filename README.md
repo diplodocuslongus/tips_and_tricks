@@ -155,17 +155,51 @@ to tranfer local to remote and vice versa
 
 whole folder, local to server:
 
-rsync -avzP -e ssh /path/to/local/video_folder/ weike_l40_server:/home2/weike/dataset/Show_Chuan_CVMPO/new_test_videos/
+    rsync -avzP -e ssh /path/to/local/video_folder/ weike_l40_server:/home2/weike/dataset/Show_Chuan_CVMPO/new_test_videos/
 
 example, single file:
-$ rsync -avzP -e ssh A001_VID004.mp4  weike_l40_server:/home2/weike/dataset/Show_Chuan_CVMPO/video_for_inference/
+
+    $ rsync -avzP -e ssh A001_VID004.mp4  weike_l40_server:/home2/weike/dataset/Show_Chuan_CVMPO/video_for_inference/
 
 whole folder:
 
-rsync -avzP -e ssh weike_l40_server:/home/weike/show_chuan_CVMPO/inference_image_outputs/ ~/Desktop/hernia_report_images/
+    rsync -avzP -e ssh weike_l40_server:/home/weike/show_chuan_CVMPO/inference_image_outputs/ ~/Desktop/hernia_report_images/
 
 single image, example:
-$ rsync -avzP -e ssh weike_l40_server:/home/weike/show_chuan_CVMPO/cvmpo/cvmpo_tracked_overlay.mp4 ~/Downloads/
+
+    $ rsync -avzP -e ssh weike_l40_server:/home/weike/show_chuan_CVMPO/cvmpo/cvmpo_tracked_overlay.mp4 ~/Downloads/
+
+Via ssh:
+
+
+    rsync -ah --progress /path/to/external/drive/Movies/ username@remote_host:/path/to/destination/
+
+
+
+Other rsync:
+
+Copy single file from laptop to drive (excellent for any size file, even 3GB video):
+
+    rsync -ah --progress /path/to/laptop/file.ext /path/to/external/drive/
+
+Whole folder (including its content):
+
+    rsync -ah --progress /path/to/laptop/folder /path/to/anywhere/
+
+Resulting in /path/to/anywhere/folder
+
+Whole folder content:
+
+    rsync -ah --progress /path/to/laptop/folder/ /path/to/anywhere/
+
+Resulting in /path/to/anywhere/[all files in folder]
+
+
+| Syntax Example| What it does | Resulting Structure |
+|Without trailing slash rsync -ah --progress /src/Movies /dest/ | Copies the folder itself and its contents |
+./dest/Movies/video.mp4 | 
+| With trailing slash rsync -ah --progress /src/Movies/ /dest/ | Copies only the contents of the folder, not the folder name |./dest/video.mp4 |
+
 
 
 ## copy - paste: on wayland
