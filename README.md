@@ -10,7 +10,8 @@
     * [utils](#utils)
 * [Productivity (linux related)](#productivity-linux-related)
     * [CLI Command Line](#cli-command-line)
-    * [ssh, scp, rsync](#ssh-scp-rsync)
+    * [ssh, scp](#ssh-scp)
+    * [rsync](#rsync)
     * [copy - paste: on wayland](#copy---paste-on-wayland)
     * [copy - paste on X11](#copy---paste-on-x11)
         * [find something](#find-something)
@@ -125,7 +126,7 @@ Super good trick:use this python script:
 
 ## CLI Command Line 
 
-## ssh, scp, rsync
+## ssh, scp 
 
 ssh using private key (like on a virtual machine):
 
@@ -148,6 +149,12 @@ Entire directory
 Using specific port:
 
     scp -P 2222 -i ~/.ssh/my_key.pem ubuntu@192.168.1.50:/home/ubuntu/file.txt .
+
+## rsync 
+
+Use rsync over cp and over scp.
+
+Works over ssh, for huge files, easy to exclude, just one thing to know: add the `/` at the end of the folder on the input and it exclude the folder itself, copying only all its content, omit the `\` and it copies the whole directory as one.
 
 rsync from laptop
 
@@ -174,7 +181,26 @@ Via ssh:
 
     rsync -ah --progress /path/to/external/drive/Movies/ username@remote_host:/path/to/destination/
 
+This compresses file which can be better over network:
+(example for copying from the server where i ran isaacsim, need to have rsync installed on the server too)
 
+    rsync -avz -e "ssh -p 30460" weike@140.96.0.168:/home/dgx/users/weike/star_arm_project ~/where/to/copy/
+
+(will copy the whole star_arm_project to inside ~/where/to/copy/)
+
+    -a (archive mode) — preserves everything (permissions, timestamps, symlinks, and recurses into subdirectories; the standard "just copy everything faithfully" flag.
+    -v (verbose) — prints each file as it copies
+    -z (compress) — compresses data in transit
+    -e "ssh -p 30460" — tells rsync to use SSH on the non-default port 30460, matching existing connection setup.
+
+Exclude a directory (ex curobo_v2):
+
+
+    rsync -avz -e "ssh -p 30460" --exclude 'curobo_v2' weike@140.96.0.168:/home/dgx/users/weike/star_arm_project/ /media/weike/D8AE-EE04/star_arm_project/
+
+exclude more than one, just repeat the flag:
+
+    rsync -avz -e "ssh -p 30460" --exclude 'curobo_v2' --exclude 'orbit_frames' weike@140.96.0.168:... ...
 
 Other rsync:
 
@@ -200,7 +226,7 @@ Resulting in /path/to/anywhere/[all files in folder]
 ./dest/Movies/video.mp4 | 
 | With trailing slash rsync -ah --progress /src/Movies/ /dest/ | Copies only the contents of the folder, not the folder name |./dest/video.mp4 |
 
-
+    rsync -ah --info=progress2 --exclude .venv /home/weike/Programs/mygitrepos/ITRI/claude_code_practice/chronophotography /media/weike/D8AE-EE04/
 
 ## copy - paste: on wayland
 
