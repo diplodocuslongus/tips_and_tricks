@@ -41,6 +41,7 @@
         * [detect, remove black frames](#detect-remove-black-frames)
         * [repair video](#repair-video)
         * [convert video](#convert-video)
+        * [shrink video size](#shrink-video-size)
         * [trim (in time) video](#trim-in-time-video)
         * [extract image](#extract-image)
         * [crop video](#crop-video)
@@ -689,6 +690,33 @@ Convert to ogv:
 (without audio)
 
     ffmpeg -ss 2.1 -i input.mp4 -c:v libtheora -an output.ogv
+
+### shrink video size
+
+Option 1: 
+
+    ffmpeg -i input.mp4 -vcodec libx264 -crf 23 -acodec copy output.mp4
+
+This uses CRF Constant Rate Factor (CRF), doesn't guarantee an exact file size, but setting the CRF to 22 or 23 usually shrinks the file significantly while maintaining excellent visual quality
+
+Option 2
+
+Compute a target bit rate based on the target file size and video duration.
+(easy)
+
+bitrate(kps) = (target_size_GB x 1024 x 1024 x 8) / video_duration
+
+Example: bitrate = (1.9 x 1024 x 1024 x 8) / 541 ~ 29000k
+Original video was 2.7GB, at ~40000kb/s
+
+
+    # Pass 1
+    ffmpeg -y -i input.mp4 -c:v libx264 -b:v 29000k -pass 1 -an -f null /dev/null
+
+    # Pass 2
+    ffmpeg -i input.mp4 -c:v libx264 -b:v 29000k -pass 2 -c:a aac -b:a 128k output.mp4
+
+Notes: 2 passes are required for best outcome, pass 1 doesn't create a video, it's only for ffmpeg to analyze it, esp. scene changes, etc...
 
 ### trim (in time) video
 
