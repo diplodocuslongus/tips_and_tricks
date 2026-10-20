@@ -177,6 +177,43 @@ single image, example:
 
     $ rsync -avzP -e ssh weike_l40_server:/home/weike/show_chuan_CVMPO/cvmpo/cvmpo_tracked_overlay.mp4 ~/Downloads/
 
+----to order (used with isaac im star arm)
+
+Add the following `star` block to ~/.ssh/config, containing already the host with the proper IP:
+
+Host 140.96.0.168
+    ServerAliveInterval 15
+    ServerAliveCountMax 3
+    TCPKeepAlive yes
+
+Host star
+      HostName 140.96.0.168
+      Port 30460
+      User weike
+
+
+Pay attention that a local `~` expands to a path that's only valid on my local machine not on the remote.
+
+So:   Use the absolute remote path — unambiguous, no expansion games:
+
+Define a bash variable:
+
+  R=star:/home/dgx/users/weike/star_arm_project/sweeps/anatomy_scene
+
+  rsync -avz --progress $R/sweep_grasp1_he_pgo/recon_gt/mesh.ply ./nofid.ply
+  rsync -avz --progress $R/sweep_grasp1_he_fid/recon_gt/mesh.ply ./withgrasper.ply
+  rsync -avz --progress $R/sweep_grasp1/recon_gt/mesh.ply        ./truepose.ply
+  rsync -avz --progress $R/sweep_grasp1/truth_mesh.ply           ./truth_grasp1.ply
+
+  The alternative is R='star:~/star_arm_project/...' in single quotes, which sends the tilde literally for the remote shell to expand. That works, but it's one missing
+  quote away from silently doing the wrong thing again — and it just bit you. Absolute paths can't.
+
+  How to spot this class of error quickly: read which side rsync blames. [sender] change_dir ... failed means the remote couldn't find it — so the path is wrong on the
+  server, and you should check it there. A local path problem reports [Receiver] instead. That one word tells you which machine to go look at.
+
+-------end to order
+
+
 Via ssh:
 
 
